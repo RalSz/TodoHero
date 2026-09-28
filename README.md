@@ -1,47 +1,30 @@
-<!--
-  This is your project's front page. Replace every placeholder below.
-  It is the first thing your instructor and any future employer will read, and
-  the live link in it is how your project gets opened for grading.
+# Todo Hero
 
-  New here? Read START-HERE.md first. Delete this comment when you are done.
--->
-
-# App Name
-
-> One sentence: what this app does, and who it is for.
+Todo Hero is a gamified todo list that combines game and productivity, intended to give motivation to procrastinators.
 
 **Live demo:** https://YOURUSERNAME.github.io/YOUR-REPO/ <!-- GitHub Pages is set up already; replace if you host elsewhere -->
-**Demo video:** `docs/demo.mp4` (link it here once it exists)
-**Course:** Applications Development and Emerging Technologies (6ADET), Holy Angel University
-**Author:** Your Name
 
-This repository lives in the author's own GitHub account and is public on
-purpose. There is no `student.json` here and there should not be one: see
-`docs/06-security-and-privacy.md` for what a public repo means for secrets and
-personal data.
+**Demo video:** `docs/demo.mp4` (link it here once it exists)
+
+**Course:** Applications Development and Emerging Technologies (6ADET), Holy Angel University
+
+**Author:** Rashley Allen L. Serioza
 
 ---
 
 ## Screenshots
 
-Put two or three real screenshots at phone size in `docs/assets/`, then replace
-this paragraph with them:
-
-```markdown
-| Home | Detail | Add |
-| --- | --- | --- |
-| ![Home](docs/assets/screen-home.png) | ![Detail](docs/assets/screen-detail.png) | ![Add](docs/assets/screen-add.png) |
-```
-
-A repo without screenshots reads as abandoned, whatever the code says.
+| Main | Quests | Add | Map | Help |
+| --- | --- | --- | --- | --- |
+| ![Main](docs/assets/screenshot-main.png) | ![Quests](docs/assets/screenshot-quests.png) | ![Add](docs/assets/screenshot-add.png) | ![Map](docs/assets/screenshot-map.png) | ![Help](docs/assets/screenshot-help.png) |
 
 ## What it does
 
 Three to five bullets. What can a user actually do?
 
-- ...
-- ...
-- ...
+- Add and keep track of tasks as quests
+- Traverse a map in a daily dungeon crawling
+- Finish tasks to complete character actions
 
 ## Built with
 
@@ -49,40 +32,22 @@ Three to five bullets. What can a user actually do?
 | --- | --- |
 | Framework | Flutter (Dart) |
 | State | `setState` / provider / riverpod (say which) |
-| Storage | shared_preferences / Hive / Drift / Firebase / Supabase / other |
-| Other packages | list the ones that matter, with a word on why |
+| Storage | Hive |
+| Other packages | N/A |
 
 ## Running it yourself
 
 ```bash
 flutter pub get
-cp .env.example .env      # only if your app needs keys, see below
 flutter run -d web-server --web-port 8080
 ```
 
 Then open http://localhost:8080. Requires Flutter (run `flutter --version` and
 put yours here).
 
-### Environment variables
-
-This project reads its configuration from a `.env` file that is **not** in the
-repository. Copy `.env.example`, fill in your own values, and never commit the
-result.
-
-| Variable | What it is | Where to get one |
-| --- | --- | --- |
-| `EXAMPLE_API_KEY` | ... | ... |
-
 ## Privacy and secrets
 
-Required section. Two or three honest sentences:
-
-- What personal data this app stores, if any, and where it goes.
-- Where the secrets live (`.env` locally, repository secrets in the deploy
-  workflow) and what protects the data on the service side (Firestore rules,
-  Supabase RLS, or "nothing leaves the device").
-- Confirm that all sample data, screenshots and the video contain **no real
-  personal information**.
+The application will not store any personally identifiable data. No data or created task leaves this device, and everything is stored in the device.
 
 ## Project documentation
 
@@ -98,34 +63,21 @@ Required section. Two or three honest sentences:
 
 ## Status and what is next
 
-Be honest. What works, what is half done, what you would build next. An honest
-"known issues" section reads better than a claim the reader disproves in thirty
-seconds.
+The Map and dungeon crawling feature is still half done. The Action and Action completion features are also still unimplemented. Also, assets are still not completed. The next feature that will be built will be the actions and related features.
 
 ## Credits
 
 - Packages: see `pubspec.yaml`
-- Assets, icons, 3D models, sounds: name the author and the licence for each
-- People who helped, and how
+- Icons and images made by me
+- Alegreya Sans by Juan Pablo del Peral, HT Fonts, licensed under the [SIL Open Font License, Version 1.1](assets/fonts/Alegreya_Sans/OFL.txt)
+- Alike by Sveta Sebyakina, Cyreal, licensed under the [SIL Open Font License, Version 1.1](assets/fonts/Alike/OFL.txt)
 
 ## AI use
 
-If you used AI while building this, say so here. Honest disclosure is the
-standard in this course and increasingly outside it, and reporting heavy use
-accurately costs you nothing.
-
-This section is the last 10 points of the finals badge, and it wants three
-things:
-
 ![Built with AI assistance](https://img.shields.io/badge/built%20with-AI%20assistance-0b5fff)
 
-- the badge above, or one you like better
-- a line naming which assistant you used and how much of the work it touched
-- a link to [AI-USAGE.md](AI-USAGE.md), where the full account lives
-
-Keep the detail in `AI-USAGE.md` rather than here. This section is the summary a
-visitor reads; that file is the record the badge is graded from.
+The development of this application included the use of AI, from both guidance and actual code. For more details, visit [AI-USAGE.md](AI-USAGE.md)..
 
 ## Licence
 
-MIT, see [LICENSE](LICENSE). Change it if you want different terms.
+MIT, see [LICENSE](LICENSE). 
