@@ -37,6 +37,9 @@ class TodoItem extends HiveObject {
   @HiveField(5)
   DateTime? dateDone;
 
+  @HiveField(6)
+  String typeAsString;
+
   TodoItem({
     required this.content,
     required this.dateDue,
@@ -44,23 +47,8 @@ class TodoItem extends HiveObject {
     this.isDone = false,
     DateTime? dateStart,
     this.dateDone,
-  }): dateStart = dateStart ?? DateTime.now() ;
-
-  String get typeAsString {
-    switch (type)
-    {
-      case QuestType.daily:
-        return "Daily";
-      case QuestType.periodic: 
-        return "Every x days";
-      case QuestType.repeatWeek:
-        return "Every x"; 
-      case QuestType.repeatMonth:
-        return "Every xth day";
-      default:
-        return "One-Time";
-    }
-  }
+    this.typeAsString = "Filler",
+  }): dateStart = dateStart ?? DateTime.now();
 
   static const List<String> typeNames = ["Once", "Periodic", "Daily", "Repeat Weekly", "Repeat Monthly"];
 }

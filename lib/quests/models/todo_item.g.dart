@@ -19,17 +19,18 @@ class TodoItemAdapter extends TypeAdapter<TodoItem> {
     return TodoItem(
       content: fields[0] as String,
       dateDue: fields[1] as DateTime,
-      isDone: fields[2] as bool,
       type: fields[3] as QuestType,
+      isDone: fields[2] as bool,
       dateStart: fields[4] as DateTime?,
       dateDone: fields[5] as DateTime?,
+      typeAsString: fields[6] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, TodoItem obj) {
     writer
-      ..writeByte(6)
+      ..writeByte(7)
       ..writeByte(0)
       ..write(obj.content)
       ..writeByte(1)
@@ -41,7 +42,9 @@ class TodoItemAdapter extends TypeAdapter<TodoItem> {
       ..writeByte(4)
       ..write(obj.dateStart)
       ..writeByte(5)
-      ..write(obj.dateDone);
+      ..write(obj.dateDone)
+      ..writeByte(6)
+      ..write(obj.typeAsString);
   }
 
   @override

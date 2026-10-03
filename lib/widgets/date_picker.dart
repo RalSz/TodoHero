@@ -19,33 +19,37 @@ class _DatePickerState extends State<DatePicker> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Text("Selected Date: ${DateFormat('EEEE, MMM d').format(_selectedDate)}", style: AppTextStyles.body),
-        ElevatedButton(
-          onPressed: () async {
-            final DateTime? dateTime = await showDatePicker(
-              context: context,
-              initialDate: _selectedDate,
-              firstDate: DateTime(2026),
-              lastDate: DateTime(2100),
-            );
-            if (dateTime != null) {
-              setState(() {
-                _selectedDate = dateTime;
-              });
-              widget.onChanged(dateTime);
-            }
-          },
-          style: ElevatedButton.styleFrom(
-            side: const BorderSide(
-              color: AppColors.secondary,
-              width: 1,
-            )
+    return Padding(
+      padding: const EdgeInsets.only(left: 8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text("Selected Date: ${DateFormat('EEEE, MMM d').format(_selectedDate)}", style: AppTextStyles.body),
+          ElevatedButton(
+            onPressed: () async {
+              final DateTime? dateTime = await showDatePicker(
+                context: context,
+                initialDate: _selectedDate,
+                firstDate: DateTime(2026),
+                lastDate: DateTime(2100),
+              );
+              if (dateTime != null) {
+                setState(() {
+                  _selectedDate = dateTime;
+                });
+                widget.onChanged(dateTime);
+              }
+            },
+            style: ElevatedButton.styleFrom(
+              side: const BorderSide(
+                color: AppColors.secondary,
+                width: 1,
+              )
+            ),
+            child: Text("Choose Date", style: AppTextStyles.body,)
           ),
-          child: Text("Choose Date", style: AppTextStyles.body,)
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

@@ -24,7 +24,7 @@ class _QuestSheetState extends State<QuestSheet>{
     // TEMP SEEDER
     if (_quests.isEmpty) {
       _quests.addAll([
-        TodoItem(content: 'Buy Milk', dateDue: DateTime.now(), isDone: false, type: QuestType.once),
+        TodoItem(content: 'Buy Milk', dateDue: DateTime.now(), isDone: false, type: QuestType.once, typeAsString: "One-Time"),
         TodoItem(content: 'Walk dog', dateDue: DateTime.now(), isDone: true, type: QuestType.daily),
         TodoItem(content: 'Do that', dateDue: DateTime.now(), isDone: false, type: QuestType.once)
       ]);
