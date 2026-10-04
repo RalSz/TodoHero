@@ -7,15 +7,15 @@ class RoomState extends HiveObject {
   @HiveField(0)
   bool explored;
 
-  /*@HiveField(1)
-  String type;*/
+  @HiveField(1)
+  bool cleared;
   
   @HiveField(2)
   int lastVisitedTurn;
 
   RoomState({
     this.explored = false,
-    /*required this.type,*/
+    this.cleared = false,
     this.lastVisitedTurn = 0,
   });
 }

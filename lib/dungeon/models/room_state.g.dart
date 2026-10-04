@@ -18,6 +18,7 @@ class RoomStateAdapter extends TypeAdapter<RoomState> {
     };
     return RoomState(
       explored: fields[0] as bool,
+      cleared: fields[1] as bool,
       lastVisitedTurn: fields[2] as int,
     );
   }
@@ -25,9 +26,11 @@ class RoomStateAdapter extends TypeAdapter<RoomState> {
   @override
   void write(BinaryWriter writer, RoomState obj) {
     writer
-      ..writeByte(2)
+      ..writeByte(3)
       ..writeByte(0)
       ..write(obj.explored)
+      ..writeByte(1)
+      ..write(obj.cleared)
       ..writeByte(2)
       ..write(obj.lastVisitedTurn);
   }

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 
 import '../widgets/quest_sheet.dart';
+import '../utils/scopes/dungeon_scope.dart';
+import '../dungeon/dungeon_manager.dart';
+import '../dungeon/models/room_node.dart';
 //import '../theme/app_theme.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -8,6 +11,22 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final dungeon = DungeonScope.of(context);
+
+    Widget _pickRoomContent()
+    {
+      if (!dungeon.isReady) 
+      {
+        return Center(child: CircularProgressIndicator());
+      }
+      final room = dungeon.currentRoom;
+      if (room == null) {
+        return const Center(child: Text('No current room.'));
+      }
+  
+      return _buildRoomContent(context, dungeon, room);
+    }
+
     return Stack(
       children: [
         Positioned(
@@ -27,16 +46,56 @@ class HomeScreen extends StatelessWidget {
             fit: BoxFit.contain,
           ),
         ),
-        Positioned(
-          top: MediaQuery.of(context).size.height * 0.395,
-          right: MediaQuery.of(context).size.width * 0.1,
-          child: Image.asset('assets/images/Repair.png',
-            height: MediaQuery.of(context).size.height * 0.125,
-            fit: BoxFit.contain,
-          ),
-        ),
+        _pickRoomContent(),
         const QuestSheet(),
       ],
     );
+  }
+}
+
+Widget _buildRoomContent(BuildContext context, DungeonManager dungeon, RoomNode room) {
+  switch (room.type) {
+    case RoomType.entrance:
+      return Positioned(
+        top: MediaQuery.of(context).size.height * 0.32,
+        /*right: MediaQuery.of(context).size.width * 0.1,*/
+        right: 0,
+        child: Image.asset('assets/images/Entrance_test.png',
+          height: MediaQuery.of(context).size.height * 0.20,
+          fit: BoxFit.contain,
+        ),
+      );
+
+    case RoomType.boss:
+      return Positioned(
+        top: MediaQuery.of(context).size.height * 0.23,
+        /*right: MediaQuery.of(context).size.width * 0.1,*/
+        right: 0,
+        child: Image.asset('assets/images/Boss_test.png',
+          height: MediaQuery.of(context).size.height * 0.3,
+          fit: BoxFit.contain,
+        ),
+      );
+
+    case RoomType.repair:
+      return Positioned(
+        top: MediaQuery.of(context).size.height * 0.395,
+        right: MediaQuery.of(context).size.width * 0.1,
+        child: Image.asset('assets/images/Repair.png',
+          height: MediaQuery.of(context).size.height * 0.125,
+          fit: BoxFit.contain,
+        ),
+      );
+
+    case RoomType.enemy:
+      return Positioned(
+        top: MediaQuery.of(context).size.height * 0.29,
+        /*right: MediaQuery.of(context).size.width * 0.1,*/
+        right: 0,
+        child: Image.asset('assets/images/Enemy_test.png',
+          height: MediaQuery.of(context).size.height * 0.25,
+          fit: BoxFit.contain,
+        ),
+      );
   }
 }

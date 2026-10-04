@@ -42,7 +42,10 @@ class DungeonRepository {
     final newSave = DungeonSave(
       seed: baseSeed,
       roomCount: roomCount,
-      currentRoomId: layout.entranceId
+      currentRoomId: layout.entranceId,
+      roomStates: {
+        layout.entranceId: RoomState(explored: true),
+      },
     );
 
     await save(newSave);
