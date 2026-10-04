@@ -1,8 +1,8 @@
 # Demo video
 
-**File:** `demo.mp4` in this folder, or the hosted link (see below)
-**Length:** aim for 3 to 5 minutes
-**Recorded on:** the device you used
+**File:** https://drive.google.com/file/d/11rUYrZh5HqF5cey_XY-WQFnzsYsRsplU/view?usp=sharing
+**Length:** 21
+**Recorded on:** Windows 11 PC
 
 ## What it shows
 

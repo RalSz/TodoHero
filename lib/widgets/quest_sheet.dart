@@ -128,11 +128,11 @@ class _QuestSheetState extends State<QuestSheet> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context){
     return DraggableScrollableSheet(
-      initialChildSize: 0.30,
-      minChildSize: 0.30,
+      initialChildSize: 0.40,
+      minChildSize: 0.40,
       maxChildSize: 1.0,
       snap: true,
-      snapSizes: [ 0.3, 1.0],
+      snapSizes: [ 0.4, 1.0],
       builder: (context, scrollController) {
         return Container(
           decoration: BoxDecoration(
