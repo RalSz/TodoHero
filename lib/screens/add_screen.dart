@@ -164,8 +164,11 @@ class _AddScreenState extends State<AddScreen> {
             Center(
               child: ElevatedButton(
                 onPressed: () {
-                  _addQuestToBox();
-                  Navigator.pop(context);
+                  if (_taskController.text.isNotEmpty)
+                  {
+                    _addQuestToBox();
+                    Navigator.pop(context);
+                  }
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primary,
