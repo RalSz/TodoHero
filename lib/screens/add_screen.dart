@@ -40,7 +40,6 @@ class _AddScreenState extends State<AddScreen> {
   {
     final type = _selectedType ?? QuestType.once;
     final content = _taskController.text;
-    TodoItem quest;
 
     final now = DateTime.now();
     final dateNow = DateTime(now.year, now.month, now.day);

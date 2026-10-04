@@ -5,6 +5,7 @@ import 'package:collection/collection.dart';
 
 import '../theme/app_theme.dart';
 import '../quests/models/todo_item.dart';
+import '../character/player.dart';
 
 class QuestSheet extends StatefulWidget {
   const QuestSheet({super.key});
@@ -15,20 +16,77 @@ class QuestSheet extends StatefulWidget {
 
 class _QuestSheetState extends State<QuestSheet>{
   late Box<TodoItem> _quests;
+  late Box<Player> _playerBox;
+  late Player _player;
+  
 
   @override
   void initState() {
     super.initState();
     _quests = Hive.box<TodoItem>('todos');
+    _playerBox = Hive.box<Player>('player');
+    _player = _playerBox.get('player') ?? _createNewPlayer();
     
     // TEMP SEEDER
     if (_quests.isEmpty) {
       _quests.addAll([
         TodoItem(content: 'Buy Milk', dateDue: DateTime.now(), isDone: false, type: QuestType.once, typeAsString: "One-Time"),
-        TodoItem(content: 'Walk dog', dateDue: DateTime.now(), isDone: true, type: QuestType.daily),
+        TodoItem(content: 'Walk dog', dateDue: DateTime.now(), isDone: true, type: QuestType.daily, dateDone: DateTime.now()),
         TodoItem(content: 'Do that', dateDue: DateTime.now(), isDone: false, type: QuestType.once)
       ]);
     }
+
+    _rundailyCheck();
+  }
+
+  Future<void> _rundailyCheck() async
+  {
+    final now = DateTime.now();
+    final last = _player.lastActiveDate;
+    final isFirstOpenToday = last == null || !_isSameDay(last, now);
+
+    if (isFirstOpenToday)
+    {
+      _player.completedQuestsToday = 0;
+      _player.lastActiveDate = now;
+      await _player.save();
+      _createCompleteRequirement();
+    } else {
+      await _syncCompletedCount();
+    }
+  }
+
+  Future<int> _createCompleteRequirement() async
+  {
+    final now = DateTime.now();
+
+    final todosNow = _quests.values
+      .where((t) => _isSameDay(t.dateDue, now)).toList().length;
+
+    final requirement = todosNow == 0 ? 0 : (() {
+      final result = todosNow * 70 ~/ 100;
+      return result == 0 ? 1 : result;
+    })();
+
+    _player.completeRequirement = requirement;
+    await _player.save();
+
+    return requirement;
+  }
+
+  Future<void> _syncCompletedCount() async
+  {
+    final count = doneTodayCount(_quests.values.toList());
+    if (_player.completedQuestsToday == count) return;
+
+    _player.completedQuestsToday = count;
+    await _player.save();
+  }
+
+  Player _createNewPlayer() {
+    final p = Player(completedQuestsToday: 0);
+    _playerBox.put('player', p);
+    return _playerBox.get('player')!;
   }
 
   Map<String, List<TodoItem>> _groupByDate(List<TodoItem> todos) {
@@ -89,6 +147,15 @@ class _QuestSheetState extends State<QuestSheet>{
                     Center(
                       child: Text("Completed Today: ${doneTodayCount(todos)}", style: AppTextStyles.body),
                     ),
+                    ValueListenableBuilder(
+                      valueListenable: _playerBox.listenable(keys: ['player']),
+                      builder: (context, Box<Player> boxPlayer, child) {
+                        final goal = boxPlayer.get('player')?.completeRequirement;
+                        return Center(
+                          child: Text("Goal for Today: $goal", style: AppTextStyles.body),
+                        );
+                      }
+                    ),
                     if (todos.isEmpty)
                       const Padding(
                         padding: EdgeInsets.only(top:24),
@@ -111,7 +178,7 @@ class _QuestSheetState extends State<QuestSheet>{
                           ],
                         ),
                       ),
-                      ...grouped[dateKey]!.map((todo) => _TodoTile(todo: todo)),
+                      ...grouped[dateKey]!.map((todo) => _TodoTile(todo: todo, onCountChanged: _syncCompletedCount,)),
                     ]
                   ];
               
@@ -131,16 +198,21 @@ class _QuestSheetState extends State<QuestSheet>{
 
 class _TodoTile extends StatelessWidget {
   final TodoItem todo;
-  const _TodoTile({required this.todo});
+  final VoidCallback onCountChanged;
+  const _TodoTile({
+    required this.todo,
+    required this.onCountChanged,
+  });
 
   @override
   Widget build(BuildContext context) {
     return CheckboxListTile(
       value: todo.isDone,
-      onChanged: (bool? val) {
+      onChanged: (bool? val) async {
         todo.isDone = val ?? false;
         todo.dateDone = todo.isDone ? DateTime.now() : null;
-        todo.save();
+        await todo.save();
+        onCountChanged();
       },
       title: Text(
         todo.content,
@@ -168,3 +240,6 @@ int doneTodayCount(List<TodoItem> todos) {
       completed.day == now.day;
   }).length;
 }
+
+bool _isSameDay(DateTime a, DateTime b) =>
+  a.year == b.year && a.month == b.month && a.day == b.day;

@@ -4,6 +4,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import '../quests/models/todo_item.dart';
 import '../dungeon/models/room_state.dart';
 import '../dungeon/models/dungeon_save.dart';
+import '../character/player.dart';
 
 class HiveLoader {
   HiveLoader._();
@@ -18,10 +19,11 @@ class HiveLoader {
     Hive.registerAdapter(QuestTypeAdapter());   // typeId 01
     Hive.registerAdapter(RoomStateAdapter());   // typeId 10
     Hive.registerAdapter(DungeonSaveAdapter()); // typeId 11
-    // typeId 12
+    Hive.registerAdapter(PlayerAdapter());      // typeId 30
 
     // Open Boxes
     await Hive.openBox<TodoItem>('todos');
     await Hive.openBox<DungeonSave>('dungeon_save');
+    await Hive.openBox<Player>('player');
   }
 }

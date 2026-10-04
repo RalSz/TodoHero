@@ -1,6 +1,6 @@
 {
-  "name": "My Final Project",
-  "short_name": "Final Project",
+  "name": "Todo Hero",
+  "short_name": "Todo Hero",
   "start_url": ".",
   "display": "standalone",
   "background_color": "#FFFFFF",

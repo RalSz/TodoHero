@@ -27,6 +27,14 @@ class HomeScreen extends StatelessWidget {
             fit: BoxFit.contain,
           ),
         ),
+        Positioned(
+          top: MediaQuery.of(context).size.height * 0.395,
+          right: MediaQuery.of(context).size.width * 0.1,
+          child: Image.asset('assets/images/Repair.png',
+            height: MediaQuery.of(context).size.height * 0.125,
+            fit: BoxFit.contain,
+          ),
+        ),
         const QuestSheet(),
       ],
     );
