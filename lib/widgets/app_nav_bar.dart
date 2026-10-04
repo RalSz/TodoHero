@@ -19,16 +19,16 @@ class AppNavBar extends StatelessWidget {
 
   static const List<_TabAsset> _tabs = [
     _TabAsset(
-      active: '../assets/icons/Icon_Scroll1_1-1.png',
-      inactive: '../assets/icons/Icon_Scroll0_1-1.png'
+      active: 'assets/icons/Icon_Scroll1_1-1.png',
+      inactive: 'assets/icons/Icon_Scroll0_1-1.png'
     ),
     _TabAsset(
-      active: '../assets/icons/Icon_Map1_1-1.png',
-      inactive: '../assets/icons/Icon_Map0_1-1.png'
+      active: 'assets/icons/Icon_Map1_1-1.png',
+      inactive: 'assets/icons/Icon_Map0_1-1.png'
     ),
     _TabAsset(
-      active: '../assets/icons/Icon_Help1_1-1.png',
-      inactive: '../assets/icons/Icon_Help0_1-1.png'
+      active: 'assets/icons/Icon_Help1_1-1.png',
+      inactive: 'assets/icons/Icon_Help0_1-1.png'
     ),
   ];
 

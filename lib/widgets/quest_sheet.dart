@@ -2,27 +2,34 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:collection/collection.dart';
+import 'dart:async';
 
 import '../theme/app_theme.dart';
 import '../quests/models/todo_item.dart';
 import '../character/player.dart';
 
 class QuestSheet extends StatefulWidget {
-  const QuestSheet({super.key});
+  final VoidCallback? onActionComplete;
+
+  const QuestSheet({
+    super.key,
+    required this.onActionComplete,
+  });
 
   @override
   State<QuestSheet> createState() => _QuestSheetState();
 }
 
-class _QuestSheetState extends State<QuestSheet>{
+class _QuestSheetState extends State<QuestSheet> with WidgetsBindingObserver {
   late Box<TodoItem> _quests;
   late Box<Player> _playerBox;
   late Player _player;
-  
+  StreamSubscription<BoxEvent>? _questSub;
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _quests = Hive.box<TodoItem>('todos');
     _playerBox = Hive.box<Player>('player');
     _player = _playerBox.get('player') ?? _createNewPlayer();
@@ -36,7 +43,15 @@ class _QuestSheetState extends State<QuestSheet>{
       ]);
     }
 
+    _questSub = _quests.watch().listen((_) => _computeCompleteRequirement());
     _rundailyCheck();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    _questSub?.cancel();
+    super.dispose();
   }
 
   Future<void> _rundailyCheck() async
@@ -50,13 +65,25 @@ class _QuestSheetState extends State<QuestSheet>{
       _player.completedQuestsToday = 0;
       _player.lastActiveDate = now;
       await _player.save();
-      _createCompleteRequirement();
+      _computeCompleteRequirement();
+      _checkCompletion();
     } else {
       await _syncCompletedCount();
     }
   }
 
-  Future<int> _createCompleteRequirement() async
+  Future<void> _checkCompletion() async
+  {
+    final done = doneTodayCount(_quests.values.toList());
+    final target = _player.completeRequirement!;
+
+    if (done >= target && target != 0)
+    {
+      widget.onActionComplete?.call();
+    }
+  }
+
+  Future<void> _computeCompleteRequirement() async
   {
     final now = DateTime.now();
 
@@ -68,10 +95,10 @@ class _QuestSheetState extends State<QuestSheet>{
       return result == 0 ? 1 : result;
     })();
 
+    if (_player.completeRequirement == requirement) return;
+
     _player.completeRequirement = requirement;
     await _player.save();
-
-    return requirement;
   }
 
   Future<void> _syncCompletedCount() async
@@ -101,11 +128,11 @@ class _QuestSheetState extends State<QuestSheet>{
   @override
   Widget build(BuildContext context){
     return DraggableScrollableSheet(
-      initialChildSize: 0.40,
-      minChildSize: 0.40,
+      initialChildSize: 0.30,
+      minChildSize: 0.30,
       maxChildSize: 1.0,
       snap: true,
-      snapSizes: [ 0.4, 1.0],
+      snapSizes: [ 0.3, 1.0],
       builder: (context, scrollController) {
         return Container(
           decoration: BoxDecoration(
@@ -166,7 +193,7 @@ class _QuestSheetState extends State<QuestSheet>{
                         padding: const EdgeInsets.only(top: 24, bottom: 8),
                         child: Row(
                           children: [
-                            Image.asset('../assets/icons/Icon_Stamp1-1.png',
+                            Image.asset('assets/icons/Icon_Stamp1-1.png',
                               width: AppTextStyles.subtitle.fontSize,
                               height: AppTextStyles.subtitle.fontSize,
                             ),

@@ -27,6 +27,12 @@ class _AddScreenState extends State<AddScreen> {
     _quests = Hive.box<TodoItem>('todos');
   }
 
+  @override
+  void dispose() {
+    _taskController.dispose();
+    super.dispose();
+  }
+
   final _taskController = TextEditingController();
   QuestType? _selectedType = QuestType.once;
   DateTime? _selectedEndDate;
@@ -45,7 +51,7 @@ class _AddScreenState extends State<AddScreen> {
     final dateNow = DateTime(now.year, now.month, now.day);
 
     final start = _selectedStartDate ?? dateNow;
-    final end = _selectedEndDate!;
+    final end = _selectedEndDate ?? dateNow;
 
     List<DateTime> days;
     String typeAsString;
@@ -147,7 +153,7 @@ class _AddScreenState extends State<AddScreen> {
                       )
                     else
                       DaySelectMonth(
-                        onChanged: (value) => setState(() {_selectedDaysMonth = value; print(_selectedDaysMonth);})
+                        onChanged: (value) => setState(() => _selectedDaysMonth = value)
                       )
                   ]
               ],
@@ -178,18 +184,18 @@ class _AddScreenState extends State<AddScreen> {
 List<DateTime> _getDaysFromTypeAndRange(DateTime start, DateTime end, QuestType type, {int? period, Set<String>? daysW, Set<int>? daysM}) {
   int totalDays = end.difference(start).inDays;
 
-  if (type == QuestType.daily)
+  if (type == QuestType.daily) // DAILY
   {
     return List.generate(
       totalDays + 1,
-      (index) => start.add(Duration(days: index))
+      (index) => DateTime(start.year, start.month, start.day + index)
     );
-  } else if (type == QuestType.periodic)
+  } else if (type == QuestType.periodic) // PERIODIC
   {
     List<DateTime> dates = [];
-    var current = DateTime.utc(start.year, start.month, start.day);
+    var current = DateTime(start.year, start.month, start.day);
     while (current.isBefore(end) || current.isAtSameMomentAs(end)) {
-      dates.add(start.isUtc 
+      dates.add(start.isUtc
         ? current 
         : DateTime(current.year, current.month, current.day)
       );
@@ -201,7 +207,7 @@ List<DateTime> _getDaysFromTypeAndRange(DateTime start, DateTime end, QuestType 
 
     List<DateTime> dates = [];
     final targets = _turnStrDaysToInt(daysW!);
-    var current = DateTime.utc(start.year, start.month, start.day);    
+    var current = DateTime(start.year, start.month, start.day);    
     
     while (current.isBefore(end) || current.isAtSameMomentAs(end)) {
       if (targets.contains(current.weekday)) {
@@ -252,18 +258,18 @@ String _getTypeAsString(QuestType type, {Set<String>? daysW, Set<int>? daysM}) {
     List<String> days = [];
     for (int day in list)
     {
-      if (day % 10 == 1)
+      if (day % 10 == 1 || day != 11)
       {
         days.add("${day}st");
-      } else if (day % 10 == 2)
+      } else if (day % 10 == 2 || day != 12)
       {
         days.add("${day}nd");
-      } else if (day % 10 == 3)
+      } else if (day % 10 == 3 || day != 13)
       {
         days.add("${day}rd");
       } else
       {
-        days.add("$day");
+        days.add("${day}th");
       }
     }
     return "Every $days";
